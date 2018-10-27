@@ -4,4 +4,4 @@ v1.3:
 * Added a combo
 - Fixed a few saving bugs
 - Update checking
- **requires requests module for version checking**
+- **requires requests module for version checking**
