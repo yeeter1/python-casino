@@ -1,34 +1,46 @@
 from tkinter import *
 from tkinter import messagebox
 import json
-import requests
 import webbrowser
 import math
 import random
 from PIL import Image, ImageTk
 from os import path as checkpath
+
+checkver = False
+CL = "3 7's = 1000 Credits \n3 Ban Hammers = Credits get slotted credits * 5 added to them."
 root = Tk()
 size = 128, 128
 root.title("Casino game")
 CurrentStatus = StringVar()
 CurrentStatus.set("Retrieving version.")
-proVer = 1.3
+proVer = 1.4
 notfound = []
 images = ["peanut.png", "7.png", "banned.png", "donute.png"]
+try:
+    import requests
+except:
+    pass
+else:
+    checkver = True
+
+
 def writeToJSONFile(data, filename):
     f = open(filename + '.json', 'w')
     json.dump(data, f)
 
-ver = requests.get("https://pastebin.com/raw/qPMD0jUW")
-ver = json.loads(ver.text)
 
-if proVer != ver[0]["CasinoVer"]:
-    res = messagebox.askyesno("New version available!", "There is a new version available, would you like to go to the github page?")
-    if res == True:
-        CurrentStatus.set("Redirecting to github")
-        webbrowser.open_new_tab("https://github.com/yeeter1/python-casino")
-else:
-    CurrentStatus.set("Up to date.")
+if checkver:
+    ver = requests.get("https://pastebin.com/raw/qPMD0jUW")
+    ver = json.loads(ver.text)
+    if proVer != ver[0]["CasinoVer"]:
+        res = messagebox.askyesno("New version available!", "There is a new version available, would you like to go to the github page?")
+        if res == True:
+            CurrentStatus.set("Redirecting to github")
+            webbrowser.open_new_tab("https://github.com/yeeter1/python-casino")
+    else:
+        CurrentStatus.set("Up to date.")
+
 
 if checkpath.isfile("donute.png") != True:
     notfound.append("donut")
@@ -94,6 +106,10 @@ def updateListData():
     listData[0]["Credits"] = credits
 
 
+def showlist():
+    messagebox.showinfo("Combo list", CL)
+
+
 def updatestatus():
     global credits, paydaycount
     if paydaycount == 0:
@@ -101,9 +117,16 @@ def updatestatus():
     else:
         CurrentStatus.set("Credits: " + str(credits) + ", payday in: " + str(paydaycount) + " slots.")
 
+
 def getcombo(i1, i2, i3):
     if i1 == "7.png" and i2 == "7.png" and i3 == "7.png":
         return "7 Streak"
+    elif i1 == "banned.png" and i2 == "banned.png" and i3 == "banned.png":
+        return "Ban Streak"
+
+
+def openshop():
+    messagebox.showinfo("Shop not complete", "Shop is currently WIP, and is hoped to be released in version 2 or earlier.")
 
 
 def slot():
@@ -144,13 +167,20 @@ def slot():
                 updateListData()
                 updatestatus()
                 writeToJSONFile(listData, "data")
+            elif combo == "Ban Streak":
+                messagebox.showinfo("Got combo!", "Achieved combo: Ban Streak! Credits slotted multiplied by 5!")
+                credits = creditsslot * 5 + credits
+                updateListData()
+                updatestatus()
+                writeToJSONFile(listData, "data")
 
 menu = Menu(root)
 root.config(menu=menu)
 subMenu = Menu(menu)
 menu.add_cascade(label="Stuff", menu=subMenu)
 subMenu.add_command(label="Payday", command=givePayday)
-subMenu.add_command(label="Shop(WIP:Ver:2)")
+subMenu.add_command(label="Shop(WIP:Ver:2)", command=openshop)
+subMenu.add_command(label="Combo list", command=showlist)
 subMenu.add_separator()
 
 CreditsToSlotL = Label(root, text="Enter how many credits you want to slot.")
@@ -166,13 +196,13 @@ status = Label(root, textvariable=CurrentStatus, bd=1, relief=SUNKEN, anchor=W)
 status.place(x=0, y=480)
 status.config(width=500)
 
-Slot1 = Label(root, text="TEST")
+Slot1 = Label(root)
 Slot1.place(x=50, y=200)
 
-Slot2 = Label(root, text="TEST")
+Slot2 = Label(root)
 Slot2.place(x=200, y=200)
 
-Slot3 = Label(root,text="TEST")
+Slot3 = Label(root)
 Slot3.place(x=375, y=200)
 
 root.resizable(width=False, height=False)
