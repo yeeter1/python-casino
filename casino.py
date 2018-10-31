@@ -4,17 +4,23 @@ import json
 import webbrowser
 import math
 import random
+import os
+import pip
+import getpass #i hate this module name because of how suspicious it looks
 from PIL import Image, ImageTk
 from os import path as checkpath
 
+github = "https://github.com/yeeter1/python-casino"
+hasgit = False
 checkver = False
+user = getpass.getuser()
 CL = "3 7's = 1000 Credits \n3 Ban Hammers = Credits get slotted credits * 5 added to them."
 root = Tk()
 size = 128, 128
 root.title("Casino game")
 CurrentStatus = StringVar()
 CurrentStatus.set("Retrieving version.")
-proVer = 1.4
+proVer = 1.5
 notfound = []
 images = ["peanut.png", "7.png", "banned.png", "donute.png"]
 try:
@@ -24,6 +30,13 @@ except:
 else:
     checkver = True
 
+try:
+    gitcheck = os.system("git")
+except:
+    messagebox.showerror("Unexpected error", "An unexepected error occured when trying to check for git via shell command.")
+else:
+    if gitcheck == 1:
+        hasgit = True
 
 def writeToJSONFile(data, filename):
     f = open(filename + '.json', 'w')
@@ -34,10 +47,9 @@ if checkver:
     ver = requests.get("https://pastebin.com/raw/qPMD0jUW")
     ver = json.loads(ver.text)
     if proVer != ver[0]["CasinoVer"]:
-        res = messagebox.askyesno("New version available!", "There is a new version available, would you like to go to the github page?")
+        res = messagebox.askyesno("New version available!", "There is a new version available, would you like to update now?")
         if res == True:
-            CurrentStatus.set("Redirecting to github")
-            webbrowser.open_new_tab("https://github.com/yeeter1/python-casino")
+            checkupdate()
     else:
         CurrentStatus.set("Up to date.")
 
@@ -100,6 +112,10 @@ def givePayday():
         CurrentStatus.set("Credits: "+ str(credits) + ", payday in: 5 slots.")
 
 
+def showver():
+    messagebox.showinfo("Current Version", "Current version: %s" % str(proVer))
+
+
 def updateListData():
     global credits, paydaycount, listData
     listData[0]["Payday"] = paydaycount
@@ -123,6 +139,31 @@ def getcombo(i1, i2, i3):
         return "7 Streak"
     elif i1 == "banned.png" and i2 == "banned.png" and i3 == "banned.png":
         return "Ban Streak"
+
+
+def checkupdate():
+    if checkver and hasgit:
+        if proVer != ver[0]["CasinoVer"]:
+            res = messagebox.askyesno("Update available!", "There is a new update available, would you like to update now?")
+            if res == True:
+                os.system("git clone %s" % (github))
+                print("done")
+                newpath = 'python-casino'
+                newjsondata = newpath + "/data"
+                abspath = os.path.abspath(newpath)
+                updateListData()
+                writeToJSONFile(listData, newjsondata)
+                messagebox.showinfo("Updated successfully", "Update saved to: %s, please restart!" % abspath)
+        else:
+            messagebox.showinfo("Up to date", "You're on the latest version!")
+    elif not checkver:
+        messagebox.showinfo("No requests module", "You don't have the requests module installed!")
+    elif not hasgit:
+        messagebox.showerror("Git not installed", "You don't have git installed!")
+
+
+def gitredirect():
+    webbrowser.open_new_tab(github)
 
 
 def openshop():
@@ -174,6 +215,7 @@ def slot():
                 updatestatus()
                 writeToJSONFile(listData, "data")
 
+
 menu = Menu(root)
 root.config(menu=menu)
 subMenu = Menu(menu)
@@ -181,6 +223,9 @@ menu.add_cascade(label="Stuff", menu=subMenu)
 subMenu.add_command(label="Payday", command=givePayday)
 subMenu.add_command(label="Shop(WIP:Ver:2)", command=openshop)
 subMenu.add_command(label="Combo list", command=showlist)
+subMenu.add_command(label="Check update", command=checkupdate)
+subMenu.add_command(label="Github page", command=gitredirect)
+subMenu.add_command(label="Current version", command=showver)
 subMenu.add_separator()
 
 CreditsToSlotL = Label(root, text="Enter how many credits you want to slot.")
@@ -209,3 +254,4 @@ root.resizable(width=False, height=False)
 root.minsize(width=750, height=500)
 root.maxsize(width=750, height=500)
 root.mainloop()
+
