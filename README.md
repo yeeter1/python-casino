@@ -8,7 +8,7 @@
 * Removed "TEST" text in slot labels
 * QOL changes for version checking, requests module is no longer required to run the program
 * New combo added
-* Combo list added in "Stuff" tab
+- Combo list added in "Stuff" tab
 * v1.5:
 * Auto-updating functionality
 
