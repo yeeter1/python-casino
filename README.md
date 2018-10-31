@@ -12,4 +12,4 @@
 * v1.5:
 * Auto-updating functionality
 
-**please note that Pillow is _required_ in order to run the program, however the requests module is only for version checking.**
+**please note that  the Pillow module is _required_ in order to run the program, however the requests module is only for version checking. git is also required to auto-update.**
