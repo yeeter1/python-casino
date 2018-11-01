@@ -6,23 +6,23 @@ import math
 import random
 import os
 import pip
-import getpass #i hate this module name because of how suspicious it looks
-from PIL import Image, ImageTk
+import getpass  # i hate this module name because of how suspicious it looks
 from os import path as checkpath
 
 github = "https://github.com/yeeter1/python-casino"
 hasgit = False
 checkver = False
+haspil = False
 user = getpass.getuser()
-CL = "3 7's = 1000 Credits \n3 Ban Hammers = Credits get slotted credits * 5 added to them."
+CL = "3 7's = 1000 Credits \n3 Ban Hammers = Credits get slotted credits * 5 added to them.\n3 Gnomes = Lose 1500 credits."
 root = Tk()
 size = 128, 128
 root.title("Casino game")
 CurrentStatus = StringVar()
 CurrentStatus.set("Retrieving version.")
-proVer = 1.5
+proVer = "1.5.2"
 notfound = []
-images = ["peanut.png", "7.png", "banned.png", "donute.png"]
+images = ["peanut.png", "7.png", "banned.png", "donute.png", "gnome.png"]
 try:
     import requests
 except:
@@ -31,12 +31,30 @@ else:
     checkver = True
 
 try:
+    from PIL import Image, ImageTk
+except:
+    pass
+else:
+    haspil = True
+
+try:
     gitcheck = os.system("git")
 except:
-    messagebox.showerror("Unexpected error", "An unexepected error occured when trying to check for git via shell command.")
+    messagebox.showerror("Unexpected error", "An unexepected error occured when trying to check for git.")
 else:
     if gitcheck == 1:
         hasgit = True
+
+if not checkver:
+    res = messagebox.askyesno("Install requests? (requires admin privileges!)", "It seems that you don't have the requests module, would you like to install it? (requires pip!)")
+    if res:
+        os.system("pip install requests")
+
+if not haspil:
+    res = messagebox.askyesno("Install Pillow? (requires admin privileges!)", "It seems that you don't have the Pillow  module (imaging), would you like to install it? (requires pip!)")
+    if res:
+        os.system("pip install Pillow")
+
 
 def writeToJSONFile(data, filename):
     f = open(filename + '.json', 'w')
@@ -46,13 +64,14 @@ def writeToJSONFile(data, filename):
 if checkver:
     ver = requests.get("https://pastebin.com/raw/qPMD0jUW")
     ver = json.loads(ver.text)
-    if proVer != ver[0]["CasinoVer"]:
+    if str(proVer) != str(ver[0]["CasinoVer"]):
         res = messagebox.askyesno("New version available!", "There is a new version available, would you like to update now?")
         if res == True:
             checkupdate()
     else:
         CurrentStatus.set("Up to date.")
 
+# too lazy to figure out how to use a for loop with this
 
 if checkpath.isfile("donute.png") != True:
     notfound.append("donut")
@@ -66,11 +85,13 @@ if checkpath.isfile("peanut.png") != True:
 if checkpath.isfile("7.png") != True:
     notfound.append("7")
 
+if checkpath.isfile("gnome.png") != True:
+    notfound.append("gnome")
 
 if len(notfound) >= 1:
     notfoundstr = ""
-    for i in notfound:
-        notfoundstr = notfoundstr + i + ","
+    for i in notfound: #even though i literally use one here lul
+        notfoundstr = notfoundstr + i + ", "
     messagebox.showwarning("Images not found", "The following images weren't found: " + notfoundstr)
 
 try:
@@ -94,7 +115,7 @@ finally:
     if paydaycount <= 0:
         CurrentStatus.set("Credits: " + str(credits) + ", ready for payday!")
     else:
-        CurrentStatus.set("Credits: "+ str(credits) + ", payday in: "+ str(paydaycount) + " slots.")
+        CurrentStatus.set("Credits: " + str(credits) + ", payday in: " + str(paydaycount) + " slots.")
 
 
 def givePayday():
@@ -109,7 +130,7 @@ def givePayday():
         listData[0]["Credits"] = credits
         CurrentStatus.set("Writing to json...")
         writeToJSONFile(listData, "data")
-        CurrentStatus.set("Credits: "+ str(credits) + ", payday in: 5 slots.")
+        CurrentStatus.set("Credits: " + str(credits) + ", payday in: 5 slots.")
 
 
 def showver():
@@ -139,12 +160,15 @@ def getcombo(i1, i2, i3):
         return "7 Streak"
     elif i1 == "banned.png" and i2 == "banned.png" and i3 == "banned.png":
         return "Ban Streak"
+    elif i1 == "gnome.png" and i2 == "gnome.png" and i3 == "gnome.png":
+        return "Gnomed"
 
 
 def checkupdate():
     if checkver and hasgit:
         if proVer != ver[0]["CasinoVer"]:
-            res = messagebox.askyesno("Update available!", "There is a new update available, would you like to update now?")
+            res = messagebox.askyesno("Update available!",
+                                      "There is a new update available, would you like to update now?")
             if res == True:
                 os.system("git clone %s" % (github))
                 print("done")
@@ -167,7 +191,8 @@ def gitredirect():
 
 
 def openshop():
-    messagebox.showinfo("Shop not complete", "Shop is currently WIP, and is hoped to be released in version 2 or earlier.")
+    messagebox.showinfo("Shop not complete",
+                        "Shop is currently WIP, and is hoped to be released in version 2 or earlier.")
 
 
 def slot():
@@ -186,9 +211,9 @@ def slot():
             updateListData()
             writeToJSONFile(listData, "data")
             updatestatus()
-            nam1 = images[random.randint(0, 3)]
-            nam2 = images[random.randint(0, 3)]
-            nam3 = images[random.randint(0, 3)]
+            nam1 = images[random.randint(0, 4)]
+            nam2 = images[random.randint(0, 4)]
+            nam3 = images[random.randint(0, 4)]
             img1 = Image.open(nam1)
             pic1 = ImageTk.PhotoImage(img1)
             Slot1.config(image=pic1)
@@ -214,6 +239,18 @@ def slot():
                 updateListData()
                 updatestatus()
                 writeToJSONFile(listData, "data")
+            elif combo == "Gnomed":
+                messagebox.showinfo("Got combo!", "Achieved combo: Gnomed! Lost 1500 Credits.")
+                if credits > 1500:
+                    credits = credits - 1500
+                    updateListData()
+                    updatestatus()
+                    writeToJSONFile(listData, "data")
+                else:
+                    credits = credits - credits
+                    updateListData()
+                    updatestatus()
+                    writeToJSONFile(listData, "data")
 
 
 menu = Menu(root)
@@ -254,4 +291,3 @@ root.resizable(width=False, height=False)
 root.minsize(width=750, height=500)
 root.maxsize(width=750, height=500)
 root.mainloop()
-
