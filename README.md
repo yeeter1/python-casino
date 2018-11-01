@@ -11,5 +11,9 @@
 - Combo list added in "Stuff" tab
 * v1.5:
 * Auto-updating functionality
+* v1.5.2:
+* New combo
+* New slot icon
+* Auto installing for requests and Pillow
 
 **please note that  the Pillow module is _required_ in order to run the program, however the requests module is only for version checking. git is also required to auto-update.**
