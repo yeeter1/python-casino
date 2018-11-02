@@ -11,7 +11,7 @@
 - Combo list added in "Stuff" tab
 * v1.5:
 * Auto-updating functionality
-* v1.5.2:
+* v1.6:
 * New combo
 * New slot icon
 * Auto installing for requests and Pillow
