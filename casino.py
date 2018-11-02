@@ -22,6 +22,30 @@ CurrentStatus = StringVar()
 CurrentStatus.set("Retrieving version.")
 proVer = "1.7"
 notfound = []
+
+
+def checkupdate():
+    if checkver and hasgit:
+        if proVer != ver[0]["CasinoVer"]:
+            res = messagebox.askyesno("Update available!",
+                                      "There is a new update available, would you like to update now?")
+            if res == True:
+                os.system("git clone %s" % (github))
+                print("done")
+                newpath = 'python-casino'
+                newjsondata = newpath + "/data"
+                abspath = os.path.abspath(newpath)
+                updateListData()
+                writeToJSONFile(listData, newjsondata)
+                messagebox.showinfo("Updated successfully", "Update saved to: %s, please restart!" % abspath)
+        else:
+            messagebox.showinfo("Up to date", "You're on the latest version!")
+    elif not checkver:
+        messagebox.showinfo("No requests module", "You don't have the requests module installed!")
+    elif not hasgit:
+        messagebox.showerror("Git not installed", "You don't have git installed!")
+
+
 images = ["peanut.png", "7.png", "banned.png", "donute.png", "gnome.png"]
 try:
     import requests
@@ -168,27 +192,6 @@ def getcombo(i1, i2, i3):
         return "Lucky Gnome"
     elif i1 == "7.png" and i2 == "gnome.png" and i3 == "gnome.png":
         return "Lucky Gnome"
-
-def checkupdate():
-    if checkver and hasgit:
-        if proVer != ver[0]["CasinoVer"]:
-            res = messagebox.askyesno("Update available!",
-                                      "There is a new update available, would you like to update now?")
-            if res == True:
-                os.system("git clone %s" % (github))
-                print("done")
-                newpath = 'python-casino'
-                newjsondata = newpath + "/data"
-                abspath = os.path.abspath(newpath)
-                updateListData()
-                writeToJSONFile(listData, newjsondata)
-                messagebox.showinfo("Updated successfully", "Update saved to: %s, please restart!" % abspath)
-        else:
-            messagebox.showinfo("Up to date", "You're on the latest version!")
-    elif not checkver:
-        messagebox.showinfo("No requests module", "You don't have the requests module installed!")
-    elif not hasgit:
-        messagebox.showerror("Git not installed", "You don't have git installed!")
 
 
 def gitredirect():
