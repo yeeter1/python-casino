@@ -15,5 +15,6 @@
 * New combo
 * New slot icon
 * Auto installing for requests and Pillow
-
+* v1.7:
+* New combo
 **please note that  the Pillow module is _required_ in order to run the program, however the requests module is only for version checking. git is also required to auto-update.**
