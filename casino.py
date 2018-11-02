@@ -20,8 +20,9 @@ size = 128, 128
 root.title("Casino game")
 CurrentStatus = StringVar()
 CurrentStatus.set("Retrieving version.")
-proVer = "1.7"
+proVer = "1.7.1"
 notfound = []
+images = ["peanut.png", "7.png", "banned.png", "donute.png", "gnome.png"]
 
 
 def checkupdate():
@@ -46,7 +47,7 @@ def checkupdate():
         messagebox.showerror("Git not installed", "You don't have git installed!")
 
 
-images = ["peanut.png", "7.png", "banned.png", "donute.png", "gnome.png"]
+
 try:
     import requests
 except:
@@ -210,9 +211,11 @@ def slot():
     if creditsslot > credits:
         messagebox.showinfo("Insufficient credits", "You don't have enough credits to slot!")
     else:
-        if str(creditsslot).find("-") != -1:
+        if creditsslot == 0:
+            messagebox.showinfo("Slot more!", "Don't slot 0 credits!")
+        elif str(creditsslot).find("-") != -1:
             messagebox.showinfo("Wrong case int", "Please only slot positive integers!")
-        else:
+        elif creditsslot > 0 and str(creditsslot).find("-") == -1:
             credits = credits - creditsslot
             if paydaycount >= 1:
                 paydaycount = paydaycount - 1
