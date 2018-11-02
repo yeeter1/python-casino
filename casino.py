@@ -20,7 +20,7 @@ size = 128, 128
 root.title("Casino game")
 CurrentStatus = StringVar()
 CurrentStatus.set("Retrieving version.")
-proVer = "1.5.2"
+proVer = "1.6"
 notfound = []
 images = ["peanut.png", "7.png", "banned.png", "donute.png", "gnome.png"]
 try:
