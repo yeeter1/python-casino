@@ -20,7 +20,7 @@ size = 128, 128
 root.title("Casino game")
 CurrentStatus = StringVar()
 CurrentStatus.set("Retrieving version.")
-proVer = "1.6"
+proVer = "1.7"
 notfound = []
 images = ["peanut.png", "7.png", "banned.png", "donute.png", "gnome.png"]
 try:
@@ -162,7 +162,12 @@ def getcombo(i1, i2, i3):
         return "Ban Streak"
     elif i1 == "gnome.png" and i2 == "gnome.png" and i3 == "gnome.png":
         return "Gnomed"
-
+    elif i1 == "gnome.png" and i2 == "gnome.png" and i3 == "7.png":
+        return "Lucky Gnome"
+    elif i1 == "gnome.png" and i2 == "7.png" and i3 == "gnome.png":
+        return "Lucky Gnome"
+    elif i1 == "7.png" and i2 == "gnome.png" and i3 == "gnome.png":
+        return "Lucky Gnome"
 
 def checkupdate():
     if checkver and hasgit:
@@ -251,6 +256,12 @@ def slot():
                     updateListData()
                     updatestatus()
                     writeToJSONFile(listData, "data")
+            elif combo == "Lucky Gnome":
+                credits = credits + 750
+                messagebox.showinfo("Got combo!", "Achieved combo: Lucky Gnome! Gained 750 credits.")
+                updateListData()
+                updatestatus()
+                writeToJSONFile(listData, "data")
 
 
 menu = Menu(root)
