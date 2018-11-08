@@ -207,7 +207,12 @@ def openshop():
 
 
 def feedback():
-    os.system("python casino-tk-feedback.py") #not very efficient i know
+    try:
+        os.system("python casino-tk-feedback.py") #not very efficient i know
+    except:
+        messagebox.showerror("Unable to execute file!", "Unable to execute casino-tk-feedback.py. Make sure its in the same directory!")
+    else:
+        pass
 
 def slot():
     global credits
