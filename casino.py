@@ -13,6 +13,8 @@ github = "https://github.com/yeeter1/python-casino"
 hasgit = False
 checkver = False
 haspil = False
+shopopen = False
+
 user = getpass.getuser()
 CL = "3 7's = 1000 Credits \n3 Ban Hammers = Credits get slotted credits * 5 added to them.\n3 Gnomes = Lose 1500 credits."
 root = Tk()
@@ -96,7 +98,7 @@ if checkver:
     else:
         CurrentStatus.set("Up to date.")
 
-# too lazy to figure out how to use a for loop with this
+# too lazy to use a for loop with this
 
 if checkpath.isfile("donute.png") != True:
     notfound.append("donut")
@@ -141,6 +143,7 @@ finally:
         CurrentStatus.set("Credits: " + str(credits) + ", ready for payday!")
     else:
         CurrentStatus.set("Credits: " + str(credits) + ", payday in: " + str(paydaycount) + " slots.")
+
 
 
 def givePayday():
@@ -200,9 +203,11 @@ def gitredirect():
 
 
 def openshop():
-    messagebox.showinfo("Shop not complete",
-                        "Shop is currently WIP, and is hoped to be released in version 2 or earlier.")
+    messagebox.showinfo("Shop current WIP", "Shop is current WIP and will hopefully be released by version 2.0.")
 
+
+def feedback():
+    os.system("python casino-tk-feedback.py") #not very efficient i know
 
 def slot():
     global credits
@@ -275,11 +280,12 @@ root.config(menu=menu)
 subMenu = Menu(menu)
 menu.add_cascade(label="Stuff", menu=subMenu)
 subMenu.add_command(label="Payday", command=givePayday)
-subMenu.add_command(label="Shop(WIP:Ver:2)", command=openshop)
+subMenu.add_command(label="Open Shop", command=openshop)
 subMenu.add_command(label="Combo list", command=showlist)
 subMenu.add_command(label="Check update", command=checkupdate)
 subMenu.add_command(label="Github page", command=gitredirect)
 subMenu.add_command(label="Current version", command=showver)
+subMenu.add_command(label="Feedback/ideas", command=feedback)
 subMenu.add_separator()
 
 CreditsToSlotL = Label(root, text="Enter how many credits you want to slot.")
