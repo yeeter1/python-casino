@@ -21,4 +21,6 @@
 * Hotfix for being able to slot 0 credits
 * v1.8:
 * New feedback system!
+* v1.8.5:
+* Security updates because some asshole had the audacity to spam my webhook (can't believe i have to implement something like that into a casino game...)
 - **please note that  the Pillow module is _required_ in order to run the program, however the requests module is only for version checking. git is also required to auto-update.**
