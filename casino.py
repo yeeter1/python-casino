@@ -5,6 +5,7 @@ import webbrowser
 import math
 import random
 import os
+import uuid
 import pip
 import getpass  # i hate this module name because of how suspicious it looks
 from os import path as checkpath
@@ -14,17 +15,32 @@ hasgit = False
 checkver = False
 haspil = False
 shopopen = False
-
+curdir = os.getcwd()
 user = getpass.getuser()
 CL = "3 7's = 1000 Credits \n3 Ban Hammers = Credits get slotted credits * 5 added to them.\n3 Gnomes = Lose 1500 credits."
 root = Tk()
 size = 128, 128
 root.title("Casino game")
 CurrentStatus = StringVar()
-CurrentStatus.set("Retrieving version.")
+CurrentStatus.set("Misc Startup")
 proVer = "1.7.1"
 notfound = []
 images = ["peanut.png", "7.png", "banned.png", "donute.png", "gnome.png"]
+
+os.chdir("C:/Users/%s/AppData/Local" % user)
+if not checkpath.isdir(os.getcwd() + "\\python-casino"):
+    os.mkdir("python-casino")
+    os.chdir(os.getcwd() + "\\python-casino")
+    id = open("id.txt", "w+")
+    id.write(str(uuid.uuid4()))
+    id.close()
+    os.chdir(curdir)
+    BL_ID = open("C:/Users/%s/AppData/Local/python-casino/id.txt" % user, "r")
+    BL_ID = BL_ID.read()
+else:
+    BL_ID = open("C:/Users/%s/AppData/Local/python-casino/id.txt" % user, "r")
+    BL_ID = BL_ID.read()
+    os.chdir(curdir)
 
 
 def checkupdate():
