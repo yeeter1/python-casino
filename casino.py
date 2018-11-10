@@ -23,7 +23,7 @@ size = 128, 128
 root.title("Casino game")
 CurrentStatus = StringVar()
 CurrentStatus.set("Misc Startup")
-proVer = "1.7.1"
+proVer = "1.8.5"
 notfound = []
 images = ["peanut.png", "7.png", "banned.png", "donute.png", "gnome.png"]
 
